@@ -30,7 +30,7 @@ services:
   grafana:
     image: grafana/grafana:4.2.0
     environment:
-      GF_ADMIN_PASSWORD:${GRAF_ADMINPW}
+#      GF_ADMIN_PASSWORD:${GRAF_ADMINPW}
       GF_ALLOW_SIGN_UP: false
     tty: true
     links:

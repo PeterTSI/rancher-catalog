@@ -16,12 +16,12 @@ catalog:
        default:
        required: true
        type: "string"
-     - variable: "GRAF_ADMINPW"
-       label: "Grafana Admin Password"
-       description: "Password for Administrative Grafana Users"
-       default:
-       required: true
-       type: "password"
+#     - variable: "GRAF_ADMINPW"
+#       label: "Grafana Admin Password"
+#       description: "Password for Administrative Grafana Users"
+#       default:
+#       required: true
+#       type: "password"
      - variable: "RANCHER_IP"
        label: "Rancher Server"
        description: "IP Address of the rancher server, no HTTP or slashes. This is only required for users that have enabled metrics to be exported by Rancher"
