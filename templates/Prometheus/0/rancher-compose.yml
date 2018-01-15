@@ -1,0 +1,119 @@
+version: '2'
+catalog:
+  name: "Prometheus Monitoring"
+  version: "v0.1"
+  description: "Monitoring Stack with Prometheus, Grafana, cAdvisor, node-exporter, rancher-exporter, LoadBalancer and predefined dashboards"
+  questions: #Used to request user input for configuration options
+     - variable: "PROM_VOLUME"
+       label: "permanent path on host"
+       description: "Please insert here the preconfigured host path to the permanent saving of the Prometheus configuration  (e.g. /docker/prometheus/prom-conf)"
+       default:
+       required: true
+       type: "string"
+     - variable: "GRAF_VOLUME"
+       label: "permanent path on host"
+       description: "Please insert here the preconfigured host path to the permanent saving of the Grafana configuration  (e.g. /docker/grafana)"
+       default:
+       required: true
+       type: "string"
+     - variable: "GRAF_ADMINPW"
+       label: "Grafana Admin Password"
+       description: "Password for Administrative Grafana Users"
+       default:
+       required: true
+       type: "password"
+     - variable: "RANCHER_IP"
+       label: "Rancher Server"
+       description: "IP Address of the rancher server, no HTTP or slashes. This is only required for users that have enabled metrics to be exported by Rancher"
+       default:
+       required: false
+       type: "string"
+
+services:
+  node-exporter:
+    start_on_create: true
+  prom-conf:
+    scale: 1
+    start_on_create: true
+  grafana:
+    scale: 1
+    start_on_create: true
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 5000
+      port: 3000
+      unhealthy_threshold: 3
+      interval: 5000
+      strategy: recreate
+  prometheus-rancher-exporter:
+    scale: 1
+    start_on_create: true
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 5000
+      port: 9173
+      unhealthy_threshold: 3
+      interval: 5000
+      strategy: recreate
+  cadvisor:
+    start_on_create: true
+  MonitorLB:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      certs: []
+      config: |-
+        global
+            userlist prometheus_user
+                 user prometheus insecure-password HAzR3K,p&f,bd2XIN
+
+        backend prometheus
+                 acl AuthOkay_UsersAuth http_auth(prometheus_user)
+                 http-request auth realm UserAuth if !AuthOkay_UsersAuth
+      default_cert: root.sdc.t-systems-service.com
+      port_rules:
+      - backend_name: grafana
+        hostname: monitor.root.sdc.t-systems-service.com
+        path: ''
+        priority: 1
+        protocol: https
+        service: grafana
+        source_port: 443
+        target_port: 3000
+      - backend_name: prometheus
+        hostname: monitor.root.sdc.t-systems-service.com
+        path: ''
+        priority: 2
+        protocol: https
+        service: prometheus
+        source_port: 9090
+        target_port: 9090
+      - backend_name: alertmanager
+        hostname: monitor.root.sdc.t-systems-service.com
+        path: ''
+        priority: 3
+        protocol: https
+        service: prometheus
+        source_port: 9093
+        target_port: 9093
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      reinitializing_timeout: 60000
+  prometheus:
+    scale: 1
+    start_on_create: true
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 5000
+      port: 9090
+      unhealthy_threshold: 3
+      interval: 5000
+      strategy: recreate
+  graf-db:
+    scale: 1
+    start_on_create: true

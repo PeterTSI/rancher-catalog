@@ -1,0 +1,11 @@
+version: '2'
+catalog:
+  name: "Prometheus scrape stack"
+  description: "This infrastructure stack enables Prometheus to scrape host specific stats and container related informations which are running on this host. It includes cAdvisor and node-exporter images."
+  version: "0.1"
+
+services:
+  node-exporter:
+    start_on_create: true
+  cadvisor:
+    start_on_create: true

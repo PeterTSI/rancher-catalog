@@ -1,0 +1,6 @@
+name: Prometheus scrape stack
+description: |
+  This infrastructure stack enables Prometheus to scrape host specific stats and container related informations which are running on this host. It includes cAdvisor and node-exporter images.
+version: 0.1
+category: Framework
+maintainer: Peter Scholta
