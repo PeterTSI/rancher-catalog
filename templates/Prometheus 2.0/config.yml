@@ -1,0 +1,7 @@
+name: Prometheus Monitoring
+version: v0.1
+description: |
+  Monitoring Stack with Prometheus, Grafana, cAdvisor, node-exporter, rancher-exporter, LoadBalancer and predefined dashboards
+category: Tools
+minimum_rancher_version: v1.6.6
+maintainer: Peter Scholta

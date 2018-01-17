@@ -70,7 +70,7 @@ services:
 #      io.rancher.container.agent.role: environmentAdmin
 #      io.rancher.container.create_agent: 'true'
   prometheus:
-    image: prom/prometheus:v1.6.0
+    image: prom/prometheus:v2.0.0
     volumes:
     - prometheus-data:/prometheus
     tty: true
